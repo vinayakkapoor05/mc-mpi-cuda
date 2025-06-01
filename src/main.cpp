@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    const long long NUM_POINTS = 100000000LL;
+    const long long NUM_POINTS = 10000000000LL;
     const int THREADS_PER_BLOCK = 256;
     int numBlocks = (NUM_POINTS + THREADS_PER_BLOCK - 1) / THREADS_PER_BLOCK;
 
@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
     cudaMalloc(&d_block_counts, numBlocks * sizeof(int));
 
     // initialize RNG states on the GPU
-    setup_curand_states<<<numBlocks, THREADS_PER_BLOCK>>>(d_states, /*seed=*/1234ULL);
+    setup_curand_states<<<numBlocks, THREADS_PER_BLOCK>>>(d_states, 1234ULL);
     cudaDeviceSynchronize();
 
     size_t shared_bytes = THREADS_PER_BLOCK * sizeof(int);
