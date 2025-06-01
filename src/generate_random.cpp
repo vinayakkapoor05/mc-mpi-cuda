@@ -24,6 +24,9 @@ void generate_random_numbers(){
             h_global_y[i] = (float)rand() /  (float)RAND_MAX;
 
         }
+    } else {
+        h_global_x = (float*)malloc(NUM_POINTS * sizeof(float));
+        h_global_y = (float*)malloc(NUM_POINTS * sizeof(float));
     }
     // main process broadcasts to worker processes
     MPI_Bcast(h_global_x, NUM_POINTS, MPI_FLOAT, 0, MPI_COMM_WORLD);
