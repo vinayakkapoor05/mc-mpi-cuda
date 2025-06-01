@@ -3,7 +3,7 @@ NVCC     := nvcc
 CXXFLAGS := -I./include -O2
 NVFLAGS  := -I./include -O2
 
-SRCS_CPP := src/main.cpp src/generate_random.cpp src/aggregate.cpp src/globals.cpp
+SRCS_CPP := src/main.cpp
 OBJS_CPP := $(SRCS_CPP:.cpp=.o)
 
 SRCS_CU  := src/pi_estimator_kernel.cu
@@ -18,7 +18,7 @@ all: monte_carlo_mpi_cuda
 	$(NVCC) $(NVFLAGS) -c $< -o $@
 
 monte_carlo_mpi_cuda: $(OBJS_CPP) $(OBJS_CU)
-	$(CXX) $(CXXFLAGS) $^ -lcudart -o $@
+	$(CXX) $(CXXFLAGS) $^ -lcudart -lcurand -o $@
 
 clean:
 	rm -f $(OBJS_CPP) $(OBJS_CU) monte_carlo_mpi_cuda
