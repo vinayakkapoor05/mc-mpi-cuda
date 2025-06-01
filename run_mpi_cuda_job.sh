@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -A e32695
+#SBATCH -A XXXX
 #SBATCH -p gengpu
 #SBATCH --gres=gpu:a100:1
 #SBATCH -N 4
