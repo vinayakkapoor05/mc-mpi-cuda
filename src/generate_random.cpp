@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <mpi.h>
-#include 
 #include "monte_carlo.h"
 
 
