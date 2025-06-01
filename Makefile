@@ -3,7 +3,7 @@ NVCC     := nvcc
 CXXFLAGS := -I./include -O2
 NVFLAGS  := -I./include -O2
 
-SRCS_CPP := src/main.cpp src/generate_random.cpp src/aggregate.cpp
+SRCS_CPP := src/main.cpp src/generate_random.cpp src/aggregate.cpp src/globals.cpp
 OBJS_CPP := $(SRCS_CPP:.cpp=.o)
 
 SRCS_CU  := src/pi_estimator_kernel.cu

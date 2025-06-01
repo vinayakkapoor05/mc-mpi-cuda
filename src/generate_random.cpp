@@ -4,8 +4,8 @@
 #include "monte_carlo.h"
 
 
-static float *h_global_x = nullptr;
-static float *h_global_y = nullptr;
+float *h_global_x = nullptr;
+float *h_global_y = nullptr;
 
 static const int  NUM_POINTS = 1000000;
 
