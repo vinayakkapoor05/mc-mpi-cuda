@@ -7,7 +7,7 @@
 float *h_global_x = nullptr;
 float *h_global_y = nullptr;
 
-static const int  NUM_POINTS = 10000000;
+static const int  NUM_POINTS = 100000000;
 
 void generate_random_numbers(){
     // only the main process (rank 0) seeds and builds the random number array
