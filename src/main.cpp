@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    const long long NUM_POINTS = 10000000000LL;
+    const long long NUM_POINTS = 100000000LL;
     const int THREADS_PER_BLOCK = 256;
     int numBlocks = (NUM_POINTS + THREADS_PER_BLOCK - 1) / THREADS_PER_BLOCK;
 
