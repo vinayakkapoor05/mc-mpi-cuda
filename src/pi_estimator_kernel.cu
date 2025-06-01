@@ -50,7 +50,7 @@ void monte_carlo_kernel(int rank, int size){
 
     long long count_inside = 0;
     for (int i = 0; i < NUM_POINTS; i++){
-        local_inside += h_in[i];
+        count_inside += h_in[i];
     }
 
 
