@@ -3,14 +3,13 @@
 #include <curand_kernel.h>
 #include "monte_carlo.h"
 
-// change NUM_POINTS from int to long long
+// changed NUM_POINTS from int to long long
 static const long long NUM_POINTS = 100000000LL;
 
 // setup curand states
 __global__ void setup_curand_states(curandState_t *states, unsigned long seed) {
     long long idx = (long long)blockDim.x * blockIdx.x + threadIdx.x;
     if (idx >= NUM_POINTS) return;
-    // seed each thread’s RNG state
     curand_init(seed, idx, 0, &states[idx]);
 }
 
@@ -20,7 +19,6 @@ __global__ void pi_estimator_kernel(curandState_t *states, int *block_counts) {
     int tid = threadIdx.x;
     long long idx = (long long)blockDim.x * blockIdx.x + tid;
 
-    // each thread generates exactly one (x,y) pair using its curandState
     int local_count = 0;
     if (idx < NUM_POINTS) {
         float x = curand_uniform(&states[idx]);  
