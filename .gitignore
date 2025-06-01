@@ -1,9 +1,4 @@
 __pycache__/
 .DS_Store
 build/
-*.out
-*.o
-*.exe
-*.a
-*.so
 .vscode/
