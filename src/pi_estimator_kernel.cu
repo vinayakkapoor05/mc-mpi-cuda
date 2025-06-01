@@ -4,7 +4,7 @@
 #include "monte_carlo.h"
 
 // changed NUM_POINTS from int to long long
-static const long long NUM_POINTS = 100000000LL;
+static const long long NUM_POINTS = 1000000000LL;
 
 // setup curand states
 __global__ void setup_curand_states(curandState_t *states, unsigned long seed) {
