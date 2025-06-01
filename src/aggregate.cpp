@@ -12,6 +12,6 @@ void aggregate(int rank, int size){
     // main process prints final result
     if (rank == 0){
         double pi = 4.0 * (double)global_inside / (double)(NUM_POINTS * size);
-        printf("%f\n", pi)
+        printf("%f\n", pi);
     }
 }
