@@ -9,7 +9,7 @@ static float *d_y = nullptr;
 static int *d_in = nullptr;
 static int *h_in = nullptr;
 
-static const int NUM_POINTS = 1000000;
+static const int NUM_POINTS = 10000000;
 
 __global__ void pi_estimator_kernel(float *x, float *y, int *inside, int num_points){
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
