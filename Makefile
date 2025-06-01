@@ -12,7 +12,7 @@ OBJS_CU  := $(SRCS_CU:.cu=.o)
 all: monte_carlo_mpi_cuda
 
 src/%.o: src/%.cpp
-	$(NVCC) $(CXXFLAGS) --compiler-options -fPIC -ccbin=$(CXX) -c $< -o $@
+	$(NVCC) -x cu $(CXXFLAGS) --compiler-options -fPIC -ccbin=$(CXX) -c $< -o $@
 
 src/%.o: src/%.cu
 	$(NVCC) $(NVFLAGS) -c $< -o $@
