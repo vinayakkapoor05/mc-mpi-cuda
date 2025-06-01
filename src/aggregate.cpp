@@ -3,6 +3,7 @@
 #include "monte_carlo.h"
 
 extern long long local_inside;
+#define NUM_POINTS 1000000
 
 void aggregate(int rank, int size){
     long long global_inside = 0;
