@@ -2,7 +2,7 @@
 #include "monte_carlo.h"
 
 
-int main (int argc, char** argv[]){
+int main (int argc, char** argv){
     int rank, size;
 
     generate_random_numbers();
@@ -20,6 +20,3 @@ int main (int argc, char** argv[]){
 }
 
 
-void generate_random_numbers(){
-
-}
