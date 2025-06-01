@@ -48,14 +48,14 @@ void monte_carlo_kernel(int rank, int size){
 
     // count the points "inside" locally
 
-    long long local_inside = 0;
+    long long count_inside = 0;
     for (int i = 0; i < NUM_POINTS; i++){
         local_inside += h_in[i];
     }
 
 
     extern long long local_inside;
-    local_inside = local_inside;
+    local_inside = count_inside;
 
 
     cudaFree(d_x);
