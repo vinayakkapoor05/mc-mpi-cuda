@@ -24,7 +24,7 @@ int main (int argc, char** argv){
 
     if (rank == 0){
         std::chrono::duration<double> time_taken = end - start; 
-        std::cout << "Time Taken : " << time_taken.count() << " seconds\n"
+        std::cout << "Time Taken : " << time_taken.count() << " seconds\n";
         }
     return 0;
 }
