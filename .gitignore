@@ -2,3 +2,8 @@ __pycache__/
 .DS_Store
 build/
 .vscode/
+*.out
+*.err
+*.o
+monte_carlo_mpi_cuda
+pi_sequential

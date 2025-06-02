@@ -18,23 +18,27 @@ int main(int argc, char **argv) {
     const long long POINTS = 400000000LL;
     const long long NUM_POINTS = POINTS/size;
 
+    // launch config
     const int THREADS_PER_BLOCK = 256;
     int numBlocks = (NUM_POINTS + THREADS_PER_BLOCK - 1) / THREADS_PER_BLOCK;
 
-    // allocate device memory for cuRAND states and per-block sums
+    // allocate device memory
     curandState_t *d_states = nullptr;
     int *d_block_counts = nullptr;
     cudaMalloc(&d_states, NUM_POINTS * sizeof(curandState_t));
     cudaMalloc(&d_block_counts, numBlocks * sizeof(int));
 
-    // initialize random number generator (RNG) states on the GPU
+    // launch setup_curand_states
     setup_curand_states<<<numBlocks, THREADS_PER_BLOCK>>>(d_states, 1234ULL, NUM_POINTS);
     cudaDeviceSynchronize(); // synchronization point  
 
+
+    // launch pi_estimator_kernel
     size_t shared_bytes = THREADS_PER_BLOCK * sizeof(int);
     pi_estimator_kernel<<<numBlocks, THREADS_PER_BLOCK, shared_bytes>>>(d_states, d_block_counts, NUM_POINTS);
     cudaDeviceSynchronize();
 
+    // copy block-level counts
     int *h_block_counts = (int*)malloc(numBlocks * sizeof(int));
     cudaMemcpy(
         h_block_counts,
@@ -43,6 +47,8 @@ int main(int argc, char **argv) {
         cudaMemcpyDeviceToHost
     ); // copy from device to host
 
+
+    // sum up this rank's count
     long long local_inside = 0;
     for (int i = 0; i < numBlocks; ++i) {
         local_inside += h_block_counts[i];
@@ -64,11 +70,14 @@ int main(int argc, char **argv) {
     if (rank == 0) {
         double pi_estimate = 4.0 * (double)global_inside / (double)(NUM_POINTS * size);
         std::cout << "Pi ≈ " << pi_estimate << std::endl;
-    } // only main process prints
+    } // only main process (rank == 0) prints the estimate
 
+
+    // cleanup
     cudaFree(d_states);
     cudaFree(d_block_counts);
 
+    // calculate time-taken
     auto end = std::chrono::high_resolution_clock::now();
     if (rank == 0) {
         std::chrono::duration<double> elapsed = end - start;
