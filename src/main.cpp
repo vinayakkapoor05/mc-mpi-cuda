@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
 
     auto start = std::chrono::high_resolution_clock::now();
     
-    const long long POINTS = 100000000LL;
+    const long long POINTS = 400000000LL;
     const long long NUM_POINTS = POINTS/size;
 
     const int THREADS_PER_BLOCK = 256;
@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
     // allocate device memory for cuRAND states and per-block sums
     curandState_t *d_states = nullptr;
     int *d_block_counts = nullptr;
+    
     cudaMalloc(&d_states, NUM_POINTS * sizeof(curandState_t));
     cudaMalloc(&d_block_counts, numBlocks * sizeof(int));
 
