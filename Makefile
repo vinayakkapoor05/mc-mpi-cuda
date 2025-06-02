@@ -8,7 +8,8 @@ SRCS_CPP := src/main.cpp
 OBJS_CPP := $(SRCS_CPP:.cpp=.o)
 
 # cuda (device) sources
-SRCS_CU  := src/pi_estimator_kernel.cu
+SRCS_CU    := src/pi_estimator_kernel.cu \
+              src/setup_curand_states.cu
 OBJS_CU  := $(SRCS_CU:.cu=.o)
 
 # sequental example
