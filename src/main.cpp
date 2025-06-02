@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
     
     const long long POINTS = 100000000LL;
     const long long NUM_POINTS = POINTS/size;
-    
+
     const int THREADS_PER_BLOCK = 256;
     int numBlocks = (NUM_POINTS + THREADS_PER_BLOCK - 1) / THREADS_PER_BLOCK;
 
@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
     cudaMalloc(&d_block_counts, numBlocks * sizeof(int));
 
     // initialize RNG states on the GPU
-    setup_curand_states<<<numBlocks, THREADS_PER_BLOCK>>>(d_states, 1234ULL, NUM_POINTS);
+    setup_curand_states<<<numBlocks, THREADS_PER_BLOCK>>>(d_states, 1234ULL + (unsigned long long)rank, NUM_POINTS);
     cudaDeviceSynchronize();
 
     size_t shared_bytes = THREADS_PER_BLOCK * sizeof(int);
