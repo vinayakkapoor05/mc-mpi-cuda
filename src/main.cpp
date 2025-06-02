@@ -14,6 +14,7 @@ int main(int argc, char **argv) {
 
     auto start = std::chrono::high_resolution_clock::now();
     
+    // total number of points/trials
     const long long POINTS = 400000000LL;
     const long long NUM_POINTS = POINTS/size;
 
@@ -23,13 +24,12 @@ int main(int argc, char **argv) {
     // allocate device memory for cuRAND states and per-block sums
     curandState_t *d_states = nullptr;
     int *d_block_counts = nullptr;
-    
     cudaMalloc(&d_states, NUM_POINTS * sizeof(curandState_t));
     cudaMalloc(&d_block_counts, numBlocks * sizeof(int));
 
-    // initialize RNG states on the GPU
+    // initialize random number generator (RNG) states on the GPU
     setup_curand_states<<<numBlocks, THREADS_PER_BLOCK>>>(d_states, 1234ULL, NUM_POINTS);
-    cudaDeviceSynchronize();
+    cudaDeviceSynchronize(); // synchronization point  
 
     size_t shared_bytes = THREADS_PER_BLOCK * sizeof(int);
     pi_estimator_kernel<<<numBlocks, THREADS_PER_BLOCK, shared_bytes>>>(d_states, d_block_counts, NUM_POINTS);
@@ -41,12 +41,12 @@ int main(int argc, char **argv) {
         d_block_counts,
         numBlocks * sizeof(int),
         cudaMemcpyDeviceToHost
-    );
+    ); // copy from device to host
 
     long long local_inside = 0;
     for (int i = 0; i < numBlocks; ++i) {
         local_inside += h_block_counts[i];
-    }
+    } 
     free(h_block_counts);
 
     // reduce across MPI ranks
@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
     if (rank == 0) {
         double pi_estimate = 4.0 * (double)global_inside / (double)(NUM_POINTS * size);
         std::cout << "Pi ≈ " << pi_estimate << std::endl;
-    }
+    } // only main process prints
 
     cudaFree(d_states);
     cudaFree(d_block_counts);

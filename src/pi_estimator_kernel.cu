@@ -12,8 +12,6 @@ __global__ void setup_curand_states(curandState_t *states, unsigned long seed, c
 
 __global__ void pi_estimator_kernel(curandState_t *states, int *block_counts, const long long NUM_POINTS) {
     extern __shared__ int s_counts[];
-
-
     int tid = threadIdx.x;
     long long idx = (long long)blockDim.x * blockIdx.x + tid;
 
@@ -30,6 +28,7 @@ __global__ void pi_estimator_kernel(curandState_t *states, int *block_counts, co
     // write into shared memory
     s_counts[tid] = local_count;
 
+    // kernel level synchronization point
     __syncthreads();
 
     // tree-reduce in shared memory
