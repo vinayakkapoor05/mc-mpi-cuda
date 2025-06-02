@@ -3,17 +3,14 @@
 #include <curand_kernel.h>
 #include "monte_carlo.h"
 
-// changed NUM_POINTS from int to long long
-static const long long NUM_POINTS = 100000000LL;
-
 // setup curand states
-__global__ void setup_curand_states(curandState_t *states, unsigned long seed) {
+__global__ void setup_curand_states(curandState_t *states, unsigned long seed, const long long NUM_POINTS) {
     long long idx = (long long)blockDim.x * blockIdx.x + threadIdx.x;
     if (idx >= NUM_POINTS) return;
     curand_init(seed, idx, 0, &states[idx]);
 }
 
-__global__ void pi_estimator_kernel(curandState_t *states, int *block_counts) {
+__global__ void pi_estimator_kernel(curandState_t *states, int *block_counts, const long long NUM_POINTS) {
     extern __shared__ int s_counts[];
 
     int tid = threadIdx.x;
