@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     auto start = std::chrono::high_resolution_clock::now();
     
     // total number of points/trials
-    const long long POINTS = 400000000LL;
+    const long long POINTS = 400000000LL;                             
     const long long NUM_POINTS = POINTS/size;
 
     // launch config

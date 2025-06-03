@@ -4,7 +4,7 @@
 #include "monte_carlo.h"
 
 
-__global__ void pi_estimator_kernel(curandState_t *states, int *block_counts, const long long NUM_POINTS) {
+__global__ void pi_estimator_kernel(curandState_t *blockStates, int *block_counts, const long long NUM_POINTS) {
     extern __shared__ int s_counts[]; // dynamic shared memory (across thread blocks)
      int tid = threadIdx.x;
     int b   = blockIdx.x;
