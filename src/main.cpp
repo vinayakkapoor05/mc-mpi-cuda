@@ -23,19 +23,19 @@ int main(int argc, char **argv) {
     int numBlocks = (NUM_POINTS + THREADS_PER_BLOCK - 1) / THREADS_PER_BLOCK;
 
     // allocate device memory
-    curandState_t *d_states = nullptr;
+    curandState_t *d_blockStates = nullptr;
     int *d_block_counts = nullptr;
-    cudaMalloc(&d_states, NUM_POINTS * sizeof(curandState_t));
+    cudaMalloc(&d_blockStates, numBlocks * sizeof(curandState_t));
     cudaMalloc(&d_block_counts, numBlocks * sizeof(int));
 
     // launch setup_curand_states
-    setup_curand_states<<<numBlocks, THREADS_PER_BLOCK>>>(d_states, 1234ULL, NUM_POINTS);
+    setup_curand_states<<<numBlocks, 1>>>(d_blockStates, 1234ULL);
     cudaDeviceSynchronize(); // synchronization point  
 
 
     // launch pi_estimator_kernel
     size_t shared_bytes = THREADS_PER_BLOCK * sizeof(int);
-    pi_estimator_kernel<<<numBlocks, THREADS_PER_BLOCK, shared_bytes>>>(d_states, d_block_counts, NUM_POINTS);
+    pi_estimator_kernel<<<numBlocks, THREADS_PER_BLOCK, shared_bytes>>>(d_blockStates, d_block_counts, NUM_POINTS);
     cudaDeviceSynchronize();
 
     // copy block-level counts
@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
 
 
     // cleanup
-    cudaFree(d_states);
+    cudaFree(d_blockStates);
     cudaFree(d_block_counts);
 
     // calculate time-taken

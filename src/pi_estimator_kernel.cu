@@ -6,17 +6,19 @@
 
 __global__ void pi_estimator_kernel(curandState_t *states, int *block_counts, const long long NUM_POINTS) {
     extern __shared__ int s_counts[]; // dynamic shared memory (across thread blocks)
-    int tid = threadIdx.x;
-    // global index of this thread
-    long long idx = (long long)blockDim.x * blockIdx.x + tid;
-
-
+     int tid = threadIdx.x;
+    int b   = blockIdx.x;
+    long long idx = (long long)blockDim.x * b + tid;
     int local_count = 0;
+
     if (idx < NUM_POINTS) {
-        // produce random point
-        float x = curand_uniform(&states[idx]);  
-        float y = curand_uniform(&states[idx]);  
-        if (x * x + y * y <= 1.0f) {
+        // cop block’s “base” state into thread‐local state
+        curandState_t localState = blockStates[b];
+        curand_init( 0ULL, b, tid, &localState);
+
+        float x = curand_uniform(&localState);
+        float y = curand_uniform(&localState);
+        if (x*x + y*y <= 1.0f) {
             local_count = 1;
         }
     }
