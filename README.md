@@ -26,3 +26,26 @@ Adjust **run_mpi_cuda_job.sh** as needed
 cd scripts
 sbatch run_mpi_cuda_job.sh
 ```
+
+## Results
+| Trials        | MPI + CUDA Time (s) | Sequential Time (s) | Speedup |
+|---------------|---------------------|---------------------|---------|
+| 400 million   | 0.81                | 3.47                | 4.3×    |
+| 800 million   | 1.36                | 7.16                | 5.3×    |
+| 1 billion     | 1.57                | 9.10                | 5.8×    |
+| 10 billion    | 12.82               | 99.26               | 7.7×    |
+
+Compute-bound GPU workload: As you increase trials, the GPU runtime scales roughly linearly, indicating minimal MPI/CUDA communication overhead.
+
+## Scaling with Nodes (400 million trials)
+
+| Nodes (GPUs)  | Time (s) | Speedup |
+|---------------|---------:|--------:|
+| 1 (1 GPU)     | ~3.24    | ~1.1×   |
+| 2 (2 GPUs)    | ~1.62    | ~2.1×   |
+| 4 (4 GPUs)    | 0.81     | 4.3×    |
+
+Speedup is nearly linear as you go from 1 to 4 GPUs, with a bit of overhead (potentially MPI_Reduce and kernel‐launch latency) showing up on 2 vs. 4 GPUs.
+One MPI rank per GPU yields the best throughput, and oversubscribing GPUs (more ranks than devices) degrades performance.
+
+
